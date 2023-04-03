@@ -41,11 +41,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
         title: Text(
           'P',
-          style: FlutterFlowTheme.of(context).title2.override(
+          style: FlutterFlowTheme.of(context).headlineMedium.override(
                 fontFamily: 'Poppins',
                 color: Colors.white,
                 fontSize: 22.0,
@@ -64,65 +64,71 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    StreamBuilder<List<ItemsRecord>>(
-                      stream: queryItemsRecord(),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      StreamBuilder<List<ItemsRecord>>(
+                        stream: queryItemsRecord(),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                        List<ItemsRecord> listViewItemsRecordList =
-                            snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewItemsRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewItemsRecord =
-                                listViewItemsRecordList[listViewIndex];
-                            return Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: wrapWithModel(
-                                    model: _model.itemCardModels.getModel(
-                                      listViewItemsRecord.reference.id,
-                                      listViewIndex,
-                                    ),
-                                    updateCallback: () => setState(() {}),
-                                    child: ItemCardWidget(
-                                      key: Key(
-                                        'Keyzw5_${listViewItemsRecord.reference.id}',
+                            );
+                          }
+                          List<ItemsRecord> listViewItemsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: listViewItemsRecordList.length,
+                            itemBuilder: (context, listViewIndex) {
+                              final listViewItemsRecord =
+                                  listViewItemsRecordList[listViewIndex];
+                              return Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: wrapWithModel(
+                                      model: _model.itemCardModels.getModel(
+                                        listViewItemsRecord.reference.id,
+                                        listViewIndex,
                                       ),
-                                      itemPath:
-                                          'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
-                                      title: listViewItemsRecord.title,
-                                      fromLocation:
-                                          listViewItemsRecord.fromString,
-                                      toLocation: listViewItemsRecord.toString,
+                                      updateCallback: () => setState(() {}),
+                                      child: ItemCardWidget(
+                                        key: Key(
+                                          'Keyzw5_${listViewItemsRecord.reference.id}',
+                                        ),
+                                        itemPath:
+                                            'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+                                        title: listViewItemsRecord.title,
+                                        fromLocation: valueOrDefault<String>(
+                                          listViewItemsRecord.from.description,
+                                          'from',
+                                        ),
+                                        toLocation: valueOrDefault<String>(
+                                          listViewItemsRecord.to.description,
+                                          'to',
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

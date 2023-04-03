@@ -15,11 +15,9 @@ abstract class ItemsRecord implements Built<ItemsRecord, ItemsRecordBuilder> {
 
   BuiltList<String>? get images;
 
-  @BuiltValueField(wireName: 'from_string')
-  String? get fromString;
+  AddressStruct get from;
 
-  @BuiltValueField(wireName: 'to_string')
-  String? get toString;
+  AddressStruct get to;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -29,8 +27,8 @@ abstract class ItemsRecord implements Built<ItemsRecord, ItemsRecordBuilder> {
     ..email = ''
     ..title = ''
     ..images = ListBuilder()
-    ..fromString = ''
-    ..toString = '';
+    ..from = AddressStructBuilder()
+    ..to = AddressStructBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('items');
@@ -56,8 +54,8 @@ abstract class ItemsRecord implements Built<ItemsRecord, ItemsRecordBuilder> {
 Map<String, dynamic> createItemsRecordData({
   String? email,
   String? title,
-  String? fromString,
-  String? toString,
+  AddressStruct? from,
+  AddressStruct? to,
 }) {
   final firestoreData = serializers.toFirestore(
     ItemsRecord.serializer,
@@ -66,10 +64,16 @@ Map<String, dynamic> createItemsRecordData({
         ..email = email
         ..title = title
         ..images = null
-        ..fromString = fromString
-        ..toString = toString,
+        ..from = AddressStructBuilder()
+        ..to = AddressStructBuilder(),
     ),
   );
+
+  // Handle nested data for "from" field.
+  addAddressStructData(firestoreData, from, 'from');
+
+  // Handle nested data for "to" field.
+  addAddressStructData(firestoreData, to, 'to');
 
   return firestoreData;
 }

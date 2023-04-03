@@ -17,7 +17,14 @@ class _$ItemsRecordSerializer implements StructuredSerializer<ItemsRecord> {
   @override
   Iterable<Object?> serialize(Serializers serializers, ItemsRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[];
+    final result = <Object?>[
+      'from',
+      serializers.serialize(object.from,
+          specifiedType: const FullType(AddressStruct)),
+      'to',
+      serializers.serialize(object.to,
+          specifiedType: const FullType(AddressStruct)),
+    ];
     Object? value;
     value = object.email;
     if (value != null) {
@@ -40,20 +47,6 @@ class _$ItemsRecordSerializer implements StructuredSerializer<ItemsRecord> {
         ..add(serializers.serialize(value,
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
-    }
-    value = object.fromString;
-    if (value != null) {
-      result
-        ..add('from_string')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.toString;
-    if (value != null) {
-      result
-        ..add('to_string')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -91,13 +84,13 @@ class _$ItemsRecordSerializer implements StructuredSerializer<ItemsRecord> {
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
-        case 'from_string':
-          result.fromString = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+        case 'from':
+          result.from.replace(serializers.deserialize(value,
+              specifiedType: const FullType(AddressStruct))! as AddressStruct);
           break;
-        case 'to_string':
-          result.toString = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+        case 'to':
+          result.to.replace(serializers.deserialize(value,
+              specifiedType: const FullType(AddressStruct))! as AddressStruct);
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -120,9 +113,9 @@ class _$ItemsRecord extends ItemsRecord {
   @override
   final BuiltList<String>? images;
   @override
-  final String? fromString;
+  final AddressStruct from;
   @override
-  final String? toString;
+  final AddressStruct to;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -133,10 +126,13 @@ class _$ItemsRecord extends ItemsRecord {
       {this.email,
       this.title,
       this.images,
-      this.fromString,
-      this.toString,
+      required this.from,
+      required this.to,
       this.ffRef})
-      : super._();
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(from, r'ItemsRecord', 'from');
+    BuiltValueNullFieldError.checkNotNull(to, r'ItemsRecord', 'to');
+  }
 
   @override
   ItemsRecord rebuild(void Function(ItemsRecordBuilder) updates) =>
@@ -152,8 +148,8 @@ class _$ItemsRecord extends ItemsRecord {
         email == other.email &&
         title == other.title &&
         images == other.images &&
-        fromString == other.fromString &&
-        toString == other.toString &&
+        from == other.from &&
+        to == other.to &&
         ffRef == other.ffRef;
   }
 
@@ -163,8 +159,8 @@ class _$ItemsRecord extends ItemsRecord {
     _$hash = $jc(_$hash, email.hashCode);
     _$hash = $jc(_$hash, title.hashCode);
     _$hash = $jc(_$hash, images.hashCode);
-    _$hash = $jc(_$hash, fromString.hashCode);
-    _$hash = $jc(_$hash, toString.hashCode);
+    _$hash = $jc(_$hash, from.hashCode);
+    _$hash = $jc(_$hash, to.hashCode);
     _$hash = $jc(_$hash, ffRef.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -176,8 +172,8 @@ class _$ItemsRecord extends ItemsRecord {
           ..add('email', email)
           ..add('title', title)
           ..add('images', images)
-          ..add('fromString', fromString)
-          ..add('toString', toString)
+          ..add('from', from)
+          ..add('to', to)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -199,13 +195,13 @@ class ItemsRecordBuilder implements Builder<ItemsRecord, ItemsRecordBuilder> {
       _$this._images ??= new ListBuilder<String>();
   set images(ListBuilder<String>? images) => _$this._images = images;
 
-  String? _fromString;
-  String? get fromString => _$this._fromString;
-  set fromString(String? fromString) => _$this._fromString = fromString;
+  AddressStructBuilder? _from;
+  AddressStructBuilder get from => _$this._from ??= new AddressStructBuilder();
+  set from(AddressStructBuilder? from) => _$this._from = from;
 
-  String? _toString;
-  String? get toString => _$this._toString;
-  set toString(String? toString) => _$this._toString = toString;
+  AddressStructBuilder? _to;
+  AddressStructBuilder get to => _$this._to ??= new AddressStructBuilder();
+  set to(AddressStructBuilder? to) => _$this._to = to;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -221,8 +217,8 @@ class ItemsRecordBuilder implements Builder<ItemsRecord, ItemsRecordBuilder> {
       _email = $v.email;
       _title = $v.title;
       _images = $v.images?.toBuilder();
-      _fromString = $v.fromString;
-      _toString = $v.toString;
+      _from = $v.from.toBuilder();
+      _to = $v.to.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -251,14 +247,18 @@ class ItemsRecordBuilder implements Builder<ItemsRecord, ItemsRecordBuilder> {
               email: email,
               title: title,
               images: _images?.build(),
-              fromString: fromString,
-              toString: toString,
+              from: from.build(),
+              to: to.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'images';
         _images?.build();
+        _$failedField = 'from';
+        from.build();
+        _$failedField = 'to';
+        to.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'ItemsRecord', _$failedField, e.toString());

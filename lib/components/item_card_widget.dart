@@ -96,12 +96,13 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                         maxChars: 36,
                         replacement: '…',
                       ),
-                      style: FlutterFlowTheme.of(context).title3.override(
-                            fontFamily: 'Outfit',
-                            color: Color(0xFF101213),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style:
+                          FlutterFlowTheme.of(context).headlineSmall.override(
+                                fontFamily: 'Outfit',
+                                color: Color(0xFF101213),
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w500,
+                              ),
                     ),
                   ),
                   Icon(
@@ -131,7 +132,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                         maxChars: 90,
                         replacement: '…',
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText2.override(
+                      style: FlutterFlowTheme.of(context).bodySmall.override(
                             fontFamily: 'Outfit',
                             color: Color(0xFF57636C),
                             fontSize: 14.0,
@@ -161,7 +162,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                         maxChars: 90,
                         replacement: '…',
                       ),
-                      style: FlutterFlowTheme.of(context).bodyText2.override(
+                      style: FlutterFlowTheme.of(context).bodySmall.override(
                             fontFamily: 'Outfit',
                             color: Color(0xFF57636C),
                             fontSize: 14.0,
@@ -192,12 +193,13 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).primaryColor,
+                        color: FlutterFlowTheme.of(context).primary,
                         textStyle:
-                            FlutterFlowTheme.of(context).subtitle2.override(
+                            FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
                                 ),
+                        elevation: 2.0,
                         borderSide: BorderSide(
                           color: Colors.transparent,
                           width: 1.0,
